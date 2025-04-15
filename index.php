@@ -17,11 +17,35 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
     $role = $_POST['form_role'];
-    $username = $_POST['username'] ?? '';
-    $phone = $_POST['phone'] ?? '';
-    $email = $_POST['email'] ?? null;
-    $cccd = $_POST['cccd'] ?? null;
+    $username = trim($_POST['username'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $email = trim($_POST['email'] ?? null);
+    $cccd = trim($_POST['cccd'] ?? null);
     $password = $_POST['password'] ?? null;
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error_message'] = "Email không đúng định dạng.";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
+
+    if (!preg_match('/^(0|\+84)?[0-9]{9}$/', $phone)) {
+        $_SESSION['error_message'] = "Số điện thoại không hợp lệ.";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
+
+    $stmt_check = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ? OR phone = ?");
+    $stmt_check->bind_param("sss", $username, $email, $phone);
+    $stmt_check->execute();
+    $stmt_check->store_result();
+    if ($stmt_check->num_rows > 0) {
+        $_SESSION['error_message'] = "Tên đăng nhập, email hoặc số điện thoại đã được sử dụng.";
+        $stmt_check->close();
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit();
+    }
+    $stmt_check->close();
 
     if ($password) {
         $password = password_hash($password, PASSWORD_BCRYPT);
@@ -38,6 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+    <link href="login.css" rel="stylesheet">
+    <link rel="icon" href="./img/logo.png" type="image/x-icon">
 </head>
 
 <body>
@@ -84,7 +111,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                     <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Tin tức</a></li>
                     <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                        <li class="nav-item text-white ms-3">👋 <?= htmlspecialchars($_SESSION['username']) ?></li>
+                        <li class="nav-item text-white ms-3">
+                            👋 <?= htmlspecialchars($_SESSION['username']) ?>
+                        </li>
+
+                        <?php if ($_SESSION['role'] === 'admin'): ?>
+                            <li class="nav-item">
+                                <a href="admin_dashboard.php" class="btn btn-outline-light ms-2">Quản lý</a>
+                            </li>
+                        <?php endif; ?>
+
                         <li class="nav-item">
                             <a href="logout.php" class="btn btn-light text-primary ms-2">Đăng xuất</a>
                         </li>
@@ -93,6 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                             <a href="login.php" class="btn btn-warning text-white ms-3">Đăng nhập</a>
                         </li>
                     <?php endif; ?>
+
                 </ul>
             </div>
         </div>
@@ -305,6 +342,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
     </footer>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const phone = form.querySelector('input[name="phone"]').value.trim();
+                    const email = form.querySelector('input[name="email"]').value.trim();
+                    const password = form.querySelector('input[name="password"]')?.value;
+
+                    const phonePattern = /^(0|\+84)?[0-9]{9}$/;
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (email && !emailPattern.test(email)) {
+                        alert("Email không đúng định dạng.");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    if (!phonePattern.test(phone)) {
+                        alert("Số điện thoại không hợp lệ. Vui lòng nhập 10 số.");
+                        e.preventDefault();
+                        return false;
+                    }
+
+                    if (password && password.length < 6) {
+                        alert("Mật khẩu phải ít nhất 6 ký tự.");
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        });
+
         function switchForm(type) {
             document.getElementById('form-user').classList.toggle('d-none', type !== 'user');
             document.getElementById('form-staff').classList.toggle('d-none', type !== 'staff');
