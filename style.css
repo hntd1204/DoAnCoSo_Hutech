@@ -1,9 +1,7 @@
-/* ======= BASE ======= */
 body {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* ======= TAB BUTTON ======= */
 .tab-btn {
     font-weight: 500;
     transition: all 0.3s ease;
@@ -20,7 +18,6 @@ body {
     color: #0d6efd;
 }
 
-/* ======= FORM CONTAINER ======= */
 .form-container {
     background: rgba(255, 255, 255, 0.95);
     padding: 2rem;
@@ -34,7 +31,6 @@ body {
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* ======= FORM ELEMENTS ======= */
 .form-control,
 .form-select {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -46,7 +42,6 @@ body {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* ======= DROPDOWN ======= */
 .dropdown-menu {
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -68,7 +63,6 @@ body {
     color: #0a58ca;
 }
 
-/* ======= CARD & IMAGE ======= */
 .card img {
     height: 200px;
     object-fit: cover;
@@ -81,7 +75,6 @@ body {
     transform: scale(1.05);
 }
 
-/* ======= TESTIMONIAL ======= */
 .testimonial-img {
     width: 32px;
     height: 32px;
@@ -109,7 +102,6 @@ footer a:hover {
     color: #fffaa2;
 }
 
-/* ======= BUTTONS ======= */
 .btn-warning {
     background-color: #ffc107;
     border: none;
@@ -126,7 +118,6 @@ footer a:hover {
     transform: scale(1.03);
 }
 
-/* ======= RESPONSIVE ======= */
 @media (max-width: 991.98px) {
     .form-container {
         margin-top: 2rem;

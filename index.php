@@ -53,8 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
 </head>
 
 <body>
-
-    <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3 fixed-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="index.php">
@@ -86,21 +84,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                     <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Tin tức</a></li>
                     <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in']): ?>
-                    <li class="nav-item text-white ms-3">👋 <?= htmlspecialchars($_SESSION['username']) ?></li>
-                    <li class="nav-item">
-                        <a href="logout.php" class="btn btn-light text-primary ms-2">Đăng xuất</a>
-                    </li>
+                        <li class="nav-item text-white ms-3">👋 <?= htmlspecialchars($_SESSION['username']) ?></li>
+                        <li class="nav-item">
+                            <a href="logout.php" class="btn btn-light text-primary ms-2">Đăng xuất</a>
+                        </li>
                     <?php else: ?>
-                    <li class="nav-item">
-                        <a href="login.php" class="btn btn-warning text-white ms-3">Đăng nhập</a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="login.php" class="btn btn-warning text-white ms-3">Đăng nhập</a>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Banner + Form -->
     <div class="container-fluid bg-light"
         style="margin-top: 100px; background-image: url('./img/bg.png'); background-size: cover; background-position: center; min-height: 600px;">
         <div class="row justify-content-end pe-5">
@@ -108,9 +105,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                 <div class="form-container">
 
                     <?php if (!empty($success_message)): ?>
-                    <div class="alert alert-success"><?= $success_message ?></div>
+                        <div class="alert alert-success"><?= $success_message ?></div>
                     <?php elseif (!empty($error_message)): ?>
-                    <div class="alert alert-danger"><?= $error_message ?></div>
+                        <div class="alert alert-danger"><?= $error_message ?></div>
                     <?php endif; ?>
 
                     <div class="d-flex justify-content-around mb-4">
@@ -118,7 +115,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                         <button class="btn btn-link tab-btn" onclick="switchForm('staff')">Tài xế</button>
                     </div>
 
-                    <!-- Form người dùng -->
                     <form id="form-user" method="POST">
                         <input type="hidden" name="form_role" value="user">
 
@@ -151,7 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                         <button type="submit" class="btn btn-warning w-100">Đăng ký</button>
                     </form>
 
-                    <!-- Form tài xế -->
                     <form id="form-staff" method="POST" class="d-none">
                         <input type="hidden" name="form_role" value="staff">
 
@@ -193,12 +188,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
         </div>
     </div>
 
-    <!-- Danh sách tài xế -->
     <section class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-5 text-primary">Tài xế có ngay!</h2>
             <div class="row g-4">
-                <!-- Card tài xế -->
                 <div class="col-md-3" *ngFor="let driver of drivers">
                     <div class="card h-100">
                         <img src="./img/driver.png" class="card-img-top" alt="Tài xế">
@@ -209,7 +202,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                         </div>
                     </div>
                 </div>
-                <!-- Repeat cards as needed -->
             </div>
             <div class="text-center mt-4">
                 <button class="btn btn-primary">Xem thêm</button>
@@ -217,7 +209,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
         </div>
     </section>
 
-    <!-- Dịch vụ nổi bật -->
     <section class="py-5">
         <div class="container">
             <h2 class="text-center text-primary mb-5">Vì sao chọn SwiftShip?</h2>
@@ -254,7 +245,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
         </div>
     </section>
 
-    <!-- Đánh giá khách hàng -->
     <section class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center text-primary mb-5">Đánh giá khách hàng</h2>
@@ -272,7 +262,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
                         <p class="small">Dịch vụ chuyên nghiệp, giá cả hợp lý, nhân viên tư vấn tận tình.</p>
                     </div>
                 </div>
-                <!-- Repeat testimonials as needed -->
             </div>
         </div>
     </section>
@@ -316,13 +305,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
     </footer>
 
     <script>
-    function switchForm(type) {
-        document.getElementById('form-user').classList.toggle('d-none', type !== 'user');
-        document.getElementById('form-staff').classList.toggle('d-none', type !== 'staff');
+        function switchForm(type) {
+            document.getElementById('form-user').classList.toggle('d-none', type !== 'user');
+            document.getElementById('form-staff').classList.toggle('d-none', type !== 'staff');
 
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelector(`.tab-btn[onclick*="${type}"]`).classList.add('active');
-    }
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.tab-btn[onclick*="${type}"]`).classList.add('active');
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
