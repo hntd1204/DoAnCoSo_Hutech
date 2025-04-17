@@ -1,15 +1,6 @@
 <?php
 session_start();
-
-$host = "localhost";
-$user = "root";
-$pass = "";
-$dbname = "swiftship";
-
-$conn = new mysqli($host, $user, $pass, $dbname);
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
+require_once("database.php");
 
 $success_message = $_SESSION['success_message'] ?? "";
 $error_message = $_SESSION['error_message'] ?? "";
@@ -117,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_role'])) {
 
                         <?php if ($_SESSION['role'] === 'admin'): ?>
                             <li class="nav-item">
-                                <a href="admin_dashboard.php" class="btn btn-outline-light ms-2">Quản lý</a>
+                                <a href="./admin/admin_dashboard.php" class="btn btn-outline-light ms-2">Quản lý</a>
                             </li>
                         <?php endif; ?>
 
